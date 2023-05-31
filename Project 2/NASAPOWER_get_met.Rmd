@@ -1,0 +1,16 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(apsimx)
+require(nasapower)
+## This will not write a file to disk
+pwr <- get_power_apsim_met(lonlat = c(107.9,10.92), dates = c("2011-01-01","2022-12-31"), wrt.dir = "C:/Users/Makan/Desktop/food_security", filename = "2040-12-31.met")
+```
+

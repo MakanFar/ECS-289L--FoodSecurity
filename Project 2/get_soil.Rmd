@@ -1,0 +1,64 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(ggplot2)
+library(apsimx)
+
+sp1 <- get_isric_soil_profile(lonlat = c(107.9,10.92))
+
+plot(sp1)
+
+plot(sp1, property = "BD")
+
+
+```
+
+```{r}
+stringify_coord <- function(coord) {
+  if (coord < 0) {
+      # print("coord is negative")
+      scoord <- paste("m", as.character(-1*coord), sep = "")
+  } else {
+      # print("coord is non-negative")
+      scoord <- as.character(coord)
+  }
+  # print(paste("scoord is:", scoord, sep = ""))
+  return(scoord)
+}
+
+# sdir is for source directory; tdir is for target directory
+inject_soil_profile <- function(sdir, tdir, lon, lat, model) {
+  sp <- get_isric_soil_profile(lonlat = c(lon, lat))
+  tag <- paste("-lonlat_", stringify_coord(lon), "_", stringify_coord(lat), sep="")
+  edit_apsimx_replace_soil_profile(
+    file = model,
+    src.dir = sdir,
+    wrt.dir = tdir,
+    soil.profile = sp,
+    edit.tag = tag,
+    overwrite = FALSE,
+    verbose = TRUE
+  )
+}
+
+```
+
+```{r}
+sdir <- "C:/Users/Makan/Desktop/food_security"
+tdir <- "C:/Users/Makan/Desktop/food_security/soil"
+model_prefix <- "wheat"
+model_suffix <- ".apsimx"
+model <- paste(model_prefix, model_suffix, sep="")
+lon <- 107.9
+lat <- 10.92
+tag <- paste("-lonlat_", stringify_coord(lon), "_", stringify_coord(lat), sep="")
+
+inject_soil_profile(sdir, tdir, lon, lat, model)
+```
